@@ -1,6 +1,13 @@
 <% provide(:title, 'All Users') %>
 <h1>ユーザー一覧</h1>
 
+<%= form_tag users_path, multipart: true do %>
+  <%= file_field_tag :file %>
+  <%= submit_tag "インポート" %>
+<% end %>
+
+
+
 <div class="col-md-10 col-md-offset-1">
   <%= will_paginate %>
   <table class="table table-condensed table-hover" id="table-users">
@@ -17,13 +24,16 @@
     </thead>
 
     <% @users.each do |user| %>
+    　 <% unless user.admin? %>
       <tr>
         <td>
-          <% if current_user.admin? %>
-            <%= link_to user.name, user %>
-          <% else %>
+          <% if user.name? %>
             <%= user.name %>
+          <% else %>
+            <%= link_to user.name, user %>
           <% end %>
+        <% end %>  
+          
         </td>
         <td class="center"><%= user.department.present? ? user.department : "未所属" %></td>
         <% if current_user.admin? %>
