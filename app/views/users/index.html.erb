@@ -24,15 +24,14 @@
     </thead>
 
     <% @users.each do |user| %>
-    　 <% unless user.admin? %>
+     <% unless user.admin? %>
+     
+     
       <tr>
         <td>
-          <% if user.name? %>
+        
             <%= user.name %>
-          <% else %>
-            <%= link_to user.name, user %>
-          <% end %>
-        <% end %>  
+     
           
         </td>
         <td class="center"><%= user.department.present? ? user.department : "未所属" %></td>
@@ -48,6 +47,7 @@
           <% end %>
         </td>
       </tr>
+      <% end %>
     <% end %>
   </table>
   <%= will_paginate %>
