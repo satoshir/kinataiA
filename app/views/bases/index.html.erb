@@ -1,1 +1,20 @@
-<h1>aaaa</h1>
+<% provide(:title, "Base list") %>
+<% provide(:class_text, 'basic-info') %>
+<% provide(:button_text, '新規作成') %>
+<h1>拠点一覧</h1>
+
+<table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <td class="col-md-4"></td>
+        <td class="col-md-2"></td>
+        <td class="col-md-2 t-middle"><%= @base.human_attribute_name :base_no %></td>
+        <td class="col-md-2 t-middle"><%= @base.human_attribute_name :base_name %></td>
+        <td class="col-md-2 t-middle"><%= @base.human_attribute_name :attendance_type %></td>
+      </tr>
+    </thead>
+    
+<tbody>
+
+</tbody>
+</table>
