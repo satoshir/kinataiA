@@ -2,15 +2,14 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info]
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy, :edit_basic_info, :update_basic_info]
   before_action :correct_user, only: [:edit, :update　]
-  before_action :admin_user, only: [:destroy, :edit_basic_info, :update_basic_info] 
+  before_action :admin_user, only: [:destroy, :edit_basic_info, :update_basic_info, :in_attendance] 
   before_action :set_one_month, only: :show
   before_action :admin_or_correct, only: :show
 
   def basic_info
   end
 
-  def in_attendance
-  end
+
   
   def bases
   end
@@ -75,6 +74,9 @@ class UsersController < ApplicationController
     end
   end
   
+  def in_attendance
+    @users = User.all
+  end
   
 
   private

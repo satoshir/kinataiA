@@ -1,14 +1,32 @@
+<% provide(:title, '出勤社員リスト') %>
 <h1>出社社員一覧</h1>
 
-  <div class="col-md-6 col-md-offset-3">
-  <table class="table table-bordered table-condensed table-hover" id="table-attendances">
+<table class="table table-bordered table-striped">
     <thead>
       <tr>
-        <th>社員番号</th>
-        <th>氏名</th>
+        <td><div class="text-center"><%= User.human_attribute_name :employee_number %></dib></td>
+        <td><div class="text-center"><%= User.human_attribute_name :name %></dib></td>
       </tr>
     </thead>
-  </table>
-  </div>
+    
+    <tbody>
+        <!--ユーザーを順に確認する-->
+      <% @users.each do |user|%>
+        <!--出勤状況を順に確認する-->
+        <% user.attendances.each do |attendance| %>
+          <!--本日の日付情報のみ確認する-->
+          <% if attendance.worked_on == Date.current %>
+            <!--出社しており、退社してなければ表示する-->
+            <% if attendance.started_at.present? && attendance.finished_at.nil? %>
+              <tr>
+                <td><div class="text-center"><%= user.employee_number %></dib></td>
+                <td><div class="text-center"><%= user.name %></dib></td>
+              </tr>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </tbody>
+</table>
   
   
