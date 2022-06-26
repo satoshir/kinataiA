@@ -15,6 +15,52 @@
     </thead>
     
 <tbody>
-
+  <% @base.each do |base| %>
+    <tr>
+      <td>
+        <%= link_to "編集", edit_basis_path(@base), class: "btn btn-primary" %>
+      </td>
+      <td class="t-middle">
+        <%= link_to "削除", base, method: :delete,
+          data: { confirm: "削除してよろしいですか？" },
+          class: "btn btn-primary" %>
+      </td>
+      <td class="t-middle"><%= base.base_no %></td>
+      <td class="t-middle"><%= base.base_name %></td>
+      <td class="t-middle"><%= base.attendance_type %></td>
+      </dib>
+      </dib>
+    </tr>
+  <% end %>
 </tbody>
 </table>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <button type="button" class="btn btn-lg btn-primary" data-toggle="collapse" 
+       data-target="#collapse_base">拠点情報追加</button>
+    </h4>
+  </div>
+  
+  <div id="collapse_base" class="panel-collapse collapse out">
+    <div class="panel-body">
+      <%= form_with(model: @base, url: bases_path, local: true, method: :post) do |f| %>
+      
+        <%= f.label "拠点番号", class: "label-#{yield(:class_text)}" %>
+        <%= f.number_field :base_no, class: "form-control" %>
+      
+        <%= f.label "拠点名", class: "label-#{yield(:class_text)}" %>
+        <%= f.text_field :base_name, class: "form-control" %>
+        
+        <%= f.label "勤務種類", class: "label-#{yield(:class_text)}" %><br>
+        
+        <div class="form-select">
+          <%= f.select :attendance_type, ["出勤", "退勤"], class: "form-control" %>
+        </div>
+      
+        <%= f.submit yield(:button_text), class: "btn btn-primary btn-block btn-#{yield(:class_text)}" %>
+      <% end %>
+    </div>
+  </div>
+</div>
