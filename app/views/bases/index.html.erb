@@ -8,17 +8,17 @@
       <tr>
         <td class="col-md-4"></td>
         <td class="col-md-2"></td>
-        <td class="col-md-2 t-middle"><%= @base.human_attribute_name :base_no %></td>
-        <td class="col-md-2 t-middle"><%= @base.human_attribute_name :base_name %></td>
-        <td class="col-md-2 t-middle"><%= @base.human_attribute_name :attendance_type %></td>
+        <td class="col-md-2 t-middle"><%= @bases.human_attribute_name :base_no %></td>
+        <td class="col-md-2 t-middle"><%= @bases.human_attribute_name :base_name %></td>
+        <td class="col-md-2 t-middle"><%= @bases.human_attribute_name :attendance_type %></td>
       </tr>
     </thead>
     
 <tbody>
-  <% @base.each do |base| %>
+  <% @bases.each do |base| %>
     <tr>
       <td>
-        <%= link_to "編集", edit_basis_path(@base), class: "btn btn-primary" %>
+        <%= link_to "編集", edit_basis_path(base), class: "btn btn-primary" %>
       </td>
       <td class="t-middle">
         <%= link_to "削除", base, method: :delete,

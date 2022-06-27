@@ -11,7 +11,7 @@ class BasesController < ApplicationController
   end
   
   def index
-    @base = Base.all
+    @bases = Base.all
   end
   
   def create
