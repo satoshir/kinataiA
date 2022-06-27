@@ -52,6 +52,6 @@ class BasesController < ApplicationController
     end
   
     def base_params
-      params.require(:base).permit(:base_no, :base_name, :attendance_type)
+      params.permit(:base_no, :base_name, :attendance_type)
     end
 end
