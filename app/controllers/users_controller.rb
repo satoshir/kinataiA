@@ -115,5 +115,9 @@ class UsersController < ApplicationController
       redirect_to root_url unless current_user.admin?
     end
     
+    def notice_overtime
+      @notice_user = User.where(id: Attendance.where(o_request: @user.name, o_approval: "申請中").select(:user_id))
+    end
+    
   
 end

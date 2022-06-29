@@ -28,6 +28,9 @@ class AttendancesController < ApplicationController
 
   def edit_one_month
   end
+  
+  def notice_overtime
+  end
 
   def update_one_month
     ActiveRecord::Base.transaction do # トランザクションを開始します。
