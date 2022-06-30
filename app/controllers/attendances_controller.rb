@@ -30,6 +30,7 @@ class AttendancesController < ApplicationController
   end
   
   def notice_overtime
+    @notice_user = User.find(1)
   end
 
   def update_one_month
