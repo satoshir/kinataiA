@@ -32,6 +32,9 @@ class AttendancesController < ApplicationController
   def notice_overtime
     @notice_user = User.find(1)
   end
+  
+  def notice_change_at
+  end
 
   def update_one_month
     ActiveRecord::Base.transaction do # トランザクションを開始します。

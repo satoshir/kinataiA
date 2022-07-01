@@ -30,7 +30,17 @@
 </div>
 
 <div>
-  <%= link_to"【残業申請のお知らせ】", attendances_notice_overtime_user_path, class:"btn btn-primary btn-attendance" %>
+    <!--link_to"【勤怠変更申請のお知らせ】", attendances_notice_change_at_user_path, remote: true, style:"color:#f00" -->
+  
+  <% if @user.superior? && current_user?(@user) %>
+    <% if @o_count >= 1 %>
+      <%= link_to "【残業申請のお知らせ】", attendances_notice_overtime_user_path, remote: true, style:"color:#f00" %>
+      <span class="box1"><%= "#{@o_count}件の通知があります" %></span><br>
+    <% else %>
+      <%= "【残業申請のお知らせ】" %><br>
+    <% end %>
+  <% end %>
+  
 </div>
 
 <!--<div class="btn-users-show">-->
