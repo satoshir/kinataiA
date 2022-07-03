@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'reports/new'
+
   root 'static_pages#top'
   get '/signup', to: 'users#new'
 
@@ -18,6 +20,7 @@ Rails.application.routes.draw do
       patch 'attendances/update_one_month'
       get 'attendances/notice_overtime'
       get 'attendances/notice_change_at'
+      get 'reports/notice_report'
     end
     resources :attendances, only: :update
   end

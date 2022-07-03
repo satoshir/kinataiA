@@ -1,5 +1,5 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: [:edit_one_month, :update_one_month]
+  before_action :set_user, only: [:edit_one_month, :update_one_month, :notice_overtime]
   before_action :logged_in_user, only: [:update, :edit_one_month]
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month]
   before_action :set_one_month, only: :edit_one_month
@@ -30,7 +30,8 @@ class AttendancesController < ApplicationController
   end
   
   def notice_overtime
-    @notice_user = User.find(1)
+   @notice_user = User.where(id: Attendance.where(o_request: @user.name, o_approval: "申請中").select(:user_id))
+   @attendance_lists = Attendance.where(o_request: @user.name, o_approval: "申請中")
   end
   
   def notice_change_at
@@ -63,6 +64,10 @@ class AttendancesController < ApplicationController
     # 1ヶ月分の勤怠情報を扱います。
     def attendances_params
       params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+    end
+    
+    def notice_overtime_params
+      params.require(:user).permit(attendances: [:o_approval, :change])[:attendances]
     end
 
     # beforeフィルター

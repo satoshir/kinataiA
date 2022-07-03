@@ -11,9 +11,10 @@
         <%= link_to "⇨", user_path(date: @first_day.next_month), class: "btn btn-sm btn-primary" %>
       </td>
       <% end %>
-      <!--<td>指定勤務時間：<%= format_basic_info(@user.work_time) %></td>-->
+    
       <td>指定勤務開始時間：<%= format_basic_info(@user.designated_work_start_time) %><br>
-      指定勤務終了時間：<%= format_basic_info(@user.designated_work_end_time) %></td>
+          指定勤務終了時間：<%= format_basic_info(@user.designated_work_end_time) %>
+      </td>
       <td colspan="3" class="center">基本勤務時間：<%= format_basic_info(@user.basic_work_time) %></td>
       <td>初日：<%= l(@first_day, format: :short) %></td>
     </tr>
@@ -29,25 +30,25 @@
   </table>
 </div>
 
-<div>
-    <!--link_to"【勤怠変更申請のお知らせ】", attendances_notice_change_at_user_path, remote: true, style:"color:#f00" -->
-  
-  <% if @user.superior? && current_user?(@user) %>
-    <% if @o_count >= 1 %>
-      <%= link_to "【残業申請のお知らせ】", attendances_notice_overtime_user_path, remote: true, style:"color:#f00" %>
-      <span class="box1"><%= "#{@o_count}件の通知があります" %></span><br>
-    <% else %>
-      <%= "【残業申請のお知らせ】" %><br>
+  <div>
+    <% if @user.superior? && current_user?(@user) %>
+         <%= link_to "【所属長承認申請のお知らせ】", reports_notice_report_user_path, remote:true, style:"color:#f00" %>
+         <span class="box1"><%= "#{@r_count}件の通知があります" %></span><br>
+        
+        <%= link_to"【勤怠変更申請のお知らせ】", attendances_notice_change_at_user_path,  style:"color:#f00" %>
+         <span class="box1"><%= "#{@a_count}件の通知があります" %></span><br>
+        
+        <%= link_to "【残業申請のお知らせ】", attendances_notice_overtime_user_path, remote:true, style:"color:#f00" %>
+        <span class="box1"><%= "#{@o_count}件の通知があります" %></span><br>
     <% end %>
-  <% end %>
-  
-</div>
+  </div>
 
 <!--<div class="btn-users-show">-->
-<!--  <%= link_to "⇦ 前月へ", user_path(date: @first_day.prev_month), class: "btn btn-info" %>-->
-<!--  <%= link_to "1ヶ月の勤怠編集へ", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>-->
-<!--  <%= link_to "次月へ ⇨", user_path(date: @first_day.next_month), class: "btn btn-info" %>-->
+<!--  <link_to "⇦ 前月へ", user_path(date: @first_day.prev_month), class: "btn btn-info" %>-->
+<!--  <link_to "1ヶ月の勤怠編集へ", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>-->
+<!--  <link_to "次月へ ⇨", user_path(date: @first_day.next_month), class: "btn btn-info" %>-->
 <!--</div>-->
+
   <table class="table table-bordered table-condensed table-hover" id="table-attendances">
     <thead>
       <tr>
@@ -91,7 +92,13 @@
           end
         %>
       <tr>
-        <td></td>
+        <td>
+          <% if current_user?(@user) %>
+            <%= link_to "残業申請", attendances_notice_overtime_user_path(params: { att_id: day ,date: @first_day } ), remote: true, class: "btn btn-primary" %>
+            <!--パスを変える。-->
+          <% end %>
+        </td>
+          <!--日付-->
         <td><%= l(day.worked_on, format: :short) %></td>
         <td class="<%= css_class %>"><%= %w{日 月 火 水 木 金 土}[day.worked_on.wday] %></td>
         <td>
@@ -158,4 +165,17 @@
     </tr>
   </tfoot>     
   </table>
-</div>
+
+  <div>
+    <!--[残業申請モーダル]-->
+    <div id="req_overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    
+    <!--[所属長承認申請のお知らせ]-->
+    <div id="notice_report" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    
+    <!--[勤怠変更申請のお知らせ]-->
+    <div id="notice_change_at" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    
+    <!--[残業申請のお知らせ]-->
+    <div id="notice_overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+  </div>
