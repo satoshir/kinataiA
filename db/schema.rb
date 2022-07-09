@@ -24,6 +24,9 @@ ActiveRecord::Schema.define(version: 20220702083345) do
     t.string "c_request"
     t.string "o_approval"
     t.string "o_request"
+    t.datetime "end_time"
+    t.float "overtime"
+    t.string "business_process"
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 
@@ -51,13 +54,13 @@ ActiveRecord::Schema.define(version: 20220702083345) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "department"
-    t.datetime "basic_work_time", default: "2022-07-01 22:30:00"
-    t.datetime "designated_work_start_time", default: "2022-07-02 00:00:00"
-    t.datetime "designated_work_end_time", default: "2022-07-02 08:30:00"
+    t.datetime "basic_work_time", default: "2022-07-06 22:30:00"
+    t.datetime "designated_work_start_time", default: "2022-07-07 00:00:00"
+    t.datetime "designated_work_end_time", default: "2022-07-07 08:30:00"
     t.integer "employee_number"
     t.string "uid"
     t.boolean "superior", default: false
-    t.datetime "work_time", default: "2022-07-01 22:30:00"
+    t.datetime "work_time", default: "2022-07-06 22:30:00"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

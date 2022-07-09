@@ -1,0 +1,2 @@
+class ReqOvertimeController < ApplicationController
+end

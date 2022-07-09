@@ -1,5 +1,5 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: [:edit_one_month, :update_one_month, :notice_overtime]
+  before_action :set_user, only: [:edit_one_month, :req_overtime, :update_one_month, :notice_overtime, :notice_change_at]
   before_action :logged_in_user, only: [:update, :edit_one_month]
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month]
   before_action :set_one_month, only: :edit_one_month
@@ -30,11 +30,25 @@ class AttendancesController < ApplicationController
   end
   
   def notice_overtime
-   @notice_user = User.where(id: Attendance.where(o_request: @user.name, o_approval: "申請中").select(:user_id))
-   @attendance_lists = Attendance.where(o_request: @user.name, o_approval: "申請中")
+    @notice_user = User.where(id: Attendance.where(o_request: @user.name, o_approval: "申請中").select(:user_id))
+    @attendance_lists = Attendance.where(o_request: @user.name, o_approval: "申請中")
+  end
+  
+  def update_notice_overtime
+     notice_overtime_params.each do |id, item|
+       attendance = Attendance.find(id)
+       attendance.attributes 
+       attendance.end_time 
+       attendance.overtime 
+       attendance.o_request 
+       attendance.o_nextday 
+       attendance.business_process 
+     end
   end
   
   def notice_change_at
+    @notice_user = User.where(id: Attendance.where(c_request: @user.name, c_approval: "申請中").select(:user_id))
+    @attendance_lists = Attendance.where(c_request: @user.name, c_approval: "申請中")
   end
 
   def update_one_month
@@ -43,10 +57,10 @@ class AttendancesController < ApplicationController
          if item[:started_at].blank? && item[:finished_at].present?
            flash[:danger] = "開始時間がないと終了時間の入力で出来ません。"
            redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
-          elsif item[:started_at].present? && item[:finished_at].blank?
+           elsif item[:started_at].present? && item[:finished_at].blank?
             flash[:danger] = "終了時間がないと終了時間の入力で出来ません。"
             redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
-          else
+           else
             attendance = Attendance.find(id)
             attendance.update_attributes!(item)
           end
@@ -58,8 +72,26 @@ class AttendancesController < ApplicationController
     flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
     redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
   end
+  
+  def req_overtime
+    @att_id = @user.attendances.find(params[:att_id].to_i)
+    if @att_id.o_request.nil?
+      @att_id.end_time = Time.current.change(year: @att_id.worked_on.year, month: @att_id.worked_on.month,
+                                              day: @att_id.worked_on.day, hour: '0', min: '0', sec: '0')
+      @att_id.save
+    end
+  end
+  
+  def update_overtime
+    @total = 0
+  end
 
   private
+      # 残業時間申請内容を扱います。
+    def req_overtime_params
+      params.require(:user).permit(attendances: [:end_time, :overtime, :o_nextday, :business_process, :o_request])
+    end
+  
 
     # 1ヶ月分の勤怠情報を扱います。
     def attendances_params
@@ -69,6 +101,11 @@ class AttendancesController < ApplicationController
     def notice_overtime_params
       params.require(:user).permit(attendances: [:o_approval, :change])[:attendances]
     end
+    
+    def notice_change_at_params
+      params.require(:user).permit(attendances: [:c_approval, :change])[:attendances]
+    end
+    
 
     # beforeフィルター
 

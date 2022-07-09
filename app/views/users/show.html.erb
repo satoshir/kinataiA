@@ -32,13 +32,14 @@
 
   <div>
     <% if @user.superior? && current_user?(@user) %>
-         <%= link_to "【所属長承認申請のお知らせ】", reports_notice_report_user_path, remote:true, style:"color:#f00" %>
+         <%= link_to "【所属長承認申請のお知らせ】", reports_notice_report_user_path, remote: true, style:"color:#f00" %>
          <span class="box1"><%= "#{@r_count}件の通知があります" %></span><br>
         
-        <%= link_to"【勤怠変更申請のお知らせ】", attendances_notice_change_at_user_path,  style:"color:#f00" %>
+        <%= link_to"【勤怠変更申請のお知らせ】", attendances_notice_change_at_user_path, remote: true, style:"color:#f00" %>
          <span class="box1"><%= "#{@a_count}件の通知があります" %></span><br>
         
-        <%= link_to "【残業申請のお知らせ】", attendances_notice_overtime_user_path, remote:true, style:"color:#f00" %>
+        
+        <%= link_to "【残業申請のお知らせ】", attendances_notice_overtime_user_path, remote: true, style:"color:#f00" %>
         <span class="box1"><%= "#{@o_count}件の通知があります" %></span><br>
     <% end %>
   </div>
@@ -94,8 +95,7 @@
       <tr>
         <td>
           <% if current_user?(@user) %>
-            <%= link_to "残業申請", attendances_notice_overtime_user_path(params: { att_id: day ,date: @first_day } ), remote: true, class: "btn btn-primary" %>
-            <!--パスを変える。-->
+            <%= link_to "残業申請", attendances_req_overtime_user_path(params: { att_id: day ,date: @first_day } ), remote: true,  class: "btn btn-primary" %>
           <% end %>
         </td>
           <!--日付-->
@@ -168,14 +168,14 @@
 
   <div>
     <!--[残業申請モーダル]-->
-    <div id="req_overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    <div id="req-overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
     
     <!--[所属長承認申請のお知らせ]-->
     <div id="notice_report" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
     
     <!--[勤怠変更申請のお知らせ]-->
-    <div id="notice_change_at" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    <div id="notice-change_at" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
     
     <!--[残業申請のお知らせ]-->
-    <div id="notice_overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    <div id="notice-overtime" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
   </div>
