@@ -32,7 +32,7 @@
                     <td class="center"><%= l(@att_id.worked_on, format: :short) %></td>
                     <!-- 曜日 -->
                     <td class="center">
-                      
+                       <%= render 'shared/day_of_week', object: @oneday = @att_id %>
                     </td>
                     <!-- 終了予定時刻 -->
                     <td class="center"><%= attendance.time_select :end_time, {:minute_step => 15} %></td>

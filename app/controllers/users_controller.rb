@@ -71,11 +71,11 @@ class UsersController < ApplicationController
   end
   
   def admin_or_correct
-      @user = User.find(params[:user_id]) if @user.blank?
-    unless current_user?(@user) || current_user.admin?
-      flash[:danger] = "アクセス出来ません。"
-      redirect_to(root_url)
-    end
+    #   @user = User.find(params[:user_id]) if @user.blank?
+    # unless current_user?(@user) || current_user.admin?
+    #   flash[:danger] = "アクセス出来ません。"
+    #   redirect_to(root_url)
+    # end
   end
   
   def in_attendance

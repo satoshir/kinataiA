@@ -26,7 +26,9 @@ ja:
           end_time: 終了予定時刻
           overtime: 時間外残業
           business_process: 業務処理内容
+          c_approval: 指示者確認㊞
           o_approval: 指示者確認㊞
+          c_request: 申請者
           o_request: 申請者
           change: 変更
           note: 備考

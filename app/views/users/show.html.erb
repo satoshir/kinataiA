@@ -30,25 +30,39 @@
   </table>
 </div>
 
-  <div>
-    <% if @user.superior? && current_user?(@user) %>
-         <%= link_to "【所属長承認申請のお知らせ】", reports_notice_report_user_path, remote: true, style:"color:#f00" %>
-         <span class="box1"><%= "#{@r_count}件の通知があります" %></span><br>
-        
-        <%= link_to"【勤怠変更申請のお知らせ】", attendances_notice_change_at_user_path, remote: true, style:"color:#f00" %>
-         <span class="box1"><%= "#{@a_count}件の通知があります" %></span><br>
-        
-        
-        <%= link_to "【残業申請のお知らせ】", attendances_notice_overtime_user_path, remote: true, style:"color:#f00" %>
-        <span class="box1"><%= "#{@o_count}件の通知があります" %></span><br>
+<div>
+  <% if @user.superior? && current_user?(@user) %>
+    <% if @r_count >= 1 %>
+      <%= link_to "【所属長承認申請のお知らせ】", reports_notice_report_user_path, remote: true, style:"color:#f00" %>
+      <span class="box1"><%= "#{@r_count}件の通知があります" %></span><br>
+    <% else %>
+      <%= "【所属長承認申請のお知らせ】" %><br>
     <% end %>
-  </div>
+    
+    <% if @a_count >= 1 %>
+      <%= link_to "【勤怠変更申請のお知らせ】", attendances_notice_change_at_user_path, remote: true, style:"color:#f00" %>
+      <span class="box1"><%= "#{@a_count}件の通知があります" %></span><br>
+    <% else %>
+      <%= "【勤怠変更申請のお知らせ】" %><br>
+    <% end %>
+    
+    <% if @o_count >= 1 %>
+      <%= link_to "【残業申請のお知らせ】", attendances_notice_overtime_user_path, remote: true, style:"color:#f00" %>
+      <span class="box1"><%= "#{@o_count}件の通知があります" %></span><br>
+    <% else %>
+      <%= "【残業申請のお知らせ】" %><br>
+    <% end %>
+  <% end %>
+</div>
 
-<!--<div class="btn-users-show">-->
-<!--  <link_to "⇦ 前月へ", user_path(date: @first_day.prev_month), class: "btn btn-info" %>-->
-<!--  <link_to "1ヶ月の勤怠編集へ", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>-->
-<!--  <link_to "次月へ ⇨", user_path(date: @first_day.next_month), class: "btn btn-info" %>-->
-<!--</div>-->
+<!--各種 新規３ボタン-->
+<div class="btn-users-show">
+  <% if current_user?(@user) %>
+    <span class="m5px">
+      <%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary" %>
+
+  <% end %>
+</div>
 
   <table class="table table-bordered table-condensed table-hover" id="table-attendances">
     <thead>
@@ -106,6 +120,7 @@
             <%= link_to "#{btn_text}登録", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
           <% end %>
         </td>
+
         <td><%= l(day.started_at.floor_to(15.minutes), format: :time) if day.started_at.present? %></td>
         <td><%= l(day.finished_at.floor_to(15.minutes), format: :time) if day.finished_at.present? %></td>
         <td>
@@ -132,11 +147,13 @@
     <!--rowspan:縦結合、colspan：横結合-->
     <tr>
       <td></td>
+      <td>累計日数</td>
       <td></td>
+      <td>在社時間合計</td>
       <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td>
+         <span class="approval"><%= "所属長承認" %></span><br>
+      </td>
       <td></td>
       <td></td>
       <td></td>
@@ -157,7 +174,9 @@
       <td></td>
       <td></td>
       <td></td>
-      <td></td>
+      <td>
+        </div>
+      </td>
       <td></td>
       <td colspan="2"><%= @attendances.count %></td>
       <td colspan="2"><%= format_basic_info(@user.work_time).to_f * @worked_sum %></td>

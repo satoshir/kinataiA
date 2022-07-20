@@ -12,6 +12,7 @@
             </div>
             
             <%= form_with(model: @user, url: attendances_update_notice_change_at_user_path, local: true, method: :patch) do |f| %>
+                 <h4 class="modal-title" style="text-align:center"><%= "【#{notice_user.name}からの勤怠変更申請】" %></h4>
                 <% @notice_user.each do |notice_user| %>
                 <table class="table table-bordered table-striped table-hover" id="table-attendances">
                   <thead>
