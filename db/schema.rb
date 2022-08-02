@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20220702083345) do
+ActiveRecord::Schema.define(version: 20220728113136) do
 
   create_table "attendances", force: :cascade do |t|
     t.date "worked_on"
@@ -22,6 +22,9 @@ ActiveRecord::Schema.define(version: 20220702083345) do
     t.datetime "updated_at", null: false
     t.string "c_approval"
     t.string "c_request"
+    t.date "c_approval_date"
+    t.datetime "c_bf_started_at"
+    t.datetime "c_bf_finished_at"
     t.datetime "c_af_started_at"
     t.datetime "c_af_finished_at"
     t.boolean "c_bf_nextday", default: false
@@ -45,10 +48,14 @@ ActiveRecord::Schema.define(version: 20220702083345) do
   end
 
   create_table "reports", force: :cascade do |t|
+    t.integer "r_month"
     t.string "r_approval"
     t.string "r_request"
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "change", default: false
+    t.index ["user_id"], name: "index_reports_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -60,13 +67,13 @@ ActiveRecord::Schema.define(version: 20220702083345) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "department"
-    t.datetime "basic_work_time", default: "2022-07-14 22:30:00"
-    t.datetime "designated_work_start_time", default: "2022-07-15 00:00:00"
-    t.datetime "designated_work_end_time", default: "2022-07-15 08:30:00"
+    t.datetime "basic_work_time", default: "2022-08-01 22:30:00"
+    t.datetime "designated_work_start_time", default: "2022-08-02 00:00:00"
+    t.datetime "designated_work_end_time", default: "2022-08-02 08:30:00"
     t.integer "employee_number"
     t.string "uid"
     t.boolean "superior", default: false
-    t.datetime "work_time", default: "2022-07-14 22:30:00"
+    t.datetime "work_time", default: "2022-08-01 22:30:00"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

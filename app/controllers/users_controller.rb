@@ -1,10 +1,15 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info]
-  before_action :logged_in_user, only: [:index, :edit, :update, :destroy, :edit_basic_info, :update_basic_info]
-  before_action :correct_user, only: [:edit, :update　]
-  before_action :admin_user, only: [:destroy, :edit_basic_info, :update_basic_info, :in_attendance] 
-  before_action :set_one_month, only: :show
-  before_action :admin_or_correct, only: :show
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :edit_basic_info_admin, :working_list, :attendance_log, :csv_export]
+  # アクセス先のログインユーザーor上長（管理者も不可）
+  before_action :logged_in_user, only: [:edit, :index, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :edit_basic_info_admin, :attendance_log, :working_list]
+  # アクセス先のログインユーザーかどうか
+  before_action :correct_user, only: [:edit, :update, :attendance_log]
+  # 管理者かどうか
+  before_action :admin_user, only: [:index, :destroy, :edit_basic_info, :update_basic_info, :edit_basic_info_admin, :working_list]
+  # １ヶ月分の勤怠情報を取得
+  before_action :set_one_month, only: [:show, :attendance_log, :csv_export]
+  # before_action :correct_user_or_admin, only: :show
+  # ログイン中かどうか
 
   def basic_info
   end
@@ -25,6 +30,25 @@ class UsersController < ApplicationController
     @r_count = Report.where(r_request: @user.name, r_approval: "申請中").count
     @a_count = Attendance.where(c_request: @user.name, c_approval: "申請中").count
     @o_count = Attendance.where(o_request: @user.name, o_approval: "申請中").count
+  end
+  
+  #勤怠修正ログ
+  def attendance_log
+    @users = User.all
+    @attendances = Attendance.where(user_id: @user).where(c_approval: "承認").order(worked_on: "DESC")
+    
+    if params[:attendance].present?
+      unless params[:attendance][:worked_on] == ""
+        @search_date = params[:attendance][:worked_on] + "-1"
+        @attendances = @attendances.where(started_at: @search_date.in_time_zone.all_year)
+                                  .where(started_at: @search_date.in_time_zone.all_month)
+        if @attendances.count == 0
+          flash.now[:warning] = "承認済みの修正履歴がありません。"
+        end
+      else
+        flash.now[:warning] = "年月を選択してください。"
+      end
+    end
   end
 
   def new
@@ -86,11 +110,11 @@ class UsersController < ApplicationController
   private
 
     def user_params
-      params.require(:user).permit(:name, :email, :department, :password, :password_confirmation)
+      params.require(:user).permit(:name, :email, :affiliation, :employee_number, :uid, :password, :basic_work_time, :designated_work_start_time, :designated_work_end_time)
     end
     
     def basic_info_params
-      params.require(:user).permit(:department, :basic_time, :work_time)
+      params.require(:user).permit(:name, :email, :affiliation, :employee_number, :uid, :password, :basic_work_time, :designated_work_start_time, :designated_work_end_time)
     end
 
     # beforeフィルター

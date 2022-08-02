@@ -1,9 +1,8 @@
 class AttendancesController < ApplicationController
   before_action :set_user, only: [:edit_one_month, :update_one_month, :req_overtime, :update_overtime, :notice_overtime, :update_notice_overtime, :notice_change_at, :update_notice_change_at, :attendance_log]
   # アクセス先のログインユーザーor上長（管理者も不可）
-  # before_action :correct_user_or_admin, only: [:edit_one_month, :update_one_month]
   before_action :correct_user, only: [:edit_one_month, :update_one_month]
-  # # ログイン中かどうか
+  # ログイン中かどうか
   before_action :logged_in_user, only: [:edit_one_month, :update_one_month]
   # アクセス先のログインユーザーかどうか
   before_action :correct_user, only: [:edit_one_month, :update_one_month]
@@ -72,7 +71,7 @@ class AttendancesController < ApplicationController
             @attendance.c_af_started_at = make_time(@attendance, "start")
             @attendance.c_af_finished_at = make_time(@attendance, "finish")
             
-            # 変更前の履歴を保存する
+            # # 変更前の履歴を保存する
             @attendance.c_bf_started_at = @attendance.started_at if @attendance.started_at.present?
             @attendance.c_bf_finished_at = @attendance.finished_at if @attendance.finished_at.present?
             
