@@ -12,7 +12,7 @@ class User < ApplicationRecord
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: true
   
-  # validates :affiliation, length: { in:2..30 }, allow_blank: true
+  validates :affiliation, length: { in:2..30 }, allow_blank: true
   validates :basic_work_time, presence: true
   validates :designated_work_start_time, presence: true
   validates :designated_work_end_time, presence: true
@@ -53,5 +53,29 @@ class User < ApplicationRecord
   # ユーザーのログイン情報を破棄します。
   def forget
     update_attribute(:remember_digest, nil)
+  end
+  
+  #importメソッド
+  def self.import(file)
+    @regist_result = false
+    CSV.foreach(file.path, headers: true, encoding: 'Shift_JIS:UTF-8') do |row|
+      # user = find_by_id(row["id"]) || new
+      user = new
+      
+      # CSVからデータを取得し、設定する
+      user.attributes = row.to_hash.slice(*updatable_attributes)
+      if user.save
+        @regist_result = true
+      end
+    end
+    return true if @regist_result
+    return false unless @regist_result
+  end
+  
+  # 更新を許可するカラムを定義
+  def self.updatable_attributes
+    ["name", "email", "affiliation", "employee_number", "uid",
+    "basic_work_time", "designated_work_start_time", "designated_work_end_time",
+    "superior", "admin", "password"]
   end
 end

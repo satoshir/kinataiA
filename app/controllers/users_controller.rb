@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :edit_basic_info_admin, :working_list, :attendance_log, :csv_export]
   # アクセス先のログインユーザーor上長（管理者も不可）
+  before_action :admin_or_correct, only: :show
+  # ログイン中かどうか
   before_action :logged_in_user, only: [:edit, :index, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :edit_basic_info_admin, :attendance_log, :working_list]
   # アクセス先のログインユーザーかどうか
   before_action :correct_user, only: [:edit, :update, :attendance_log]
@@ -8,8 +10,8 @@ class UsersController < ApplicationController
   before_action :admin_user, only: [:index, :destroy, :edit_basic_info, :update_basic_info, :edit_basic_info_admin, :working_list]
   # １ヶ月分の勤怠情報を取得
   before_action :set_one_month, only: [:show, :attendance_log, :csv_export]
-  # before_action :correct_user_or_admin, only: :show
-  # ログイン中かどうか
+ 
+
 
   def basic_info
   end
@@ -49,6 +51,35 @@ class UsersController < ApplicationController
         flash.now[:warning] = "年月を選択してください。"
       end
     end
+  end
+  
+  def csv_export
+    respond_to do |format|
+      format.html do
+          #html用の処理を書く
+      end 
+      format.csv do
+          #csv用の処理を書く
+          send_data render_to_string,
+          filename: "【勤怠】#{@user.name}_#{@first_day.strftime("%Y-%m")}.csv", type: :csv
+      end
+    end
+  end
+  
+  def import
+    # fileはtmp(temporary)に自動で一時保存される
+    if params[:file].presence
+      @regist_check = User.import(params[:file])
+      
+      if @regist_check
+        flash[:success] = "CSVファイルのインポートが完了しました。"
+      else
+        flash[:danger] = "更新できるデータがありませんでした。"
+      end
+    else
+      flash[:danger] = "CSVファイルが選択されていません。"
+    end
+    redirect_to users_url
   end
 
   def new
@@ -95,11 +126,11 @@ class UsersController < ApplicationController
   end
   
   def admin_or_correct
-    #   @user = User.find(params[:user_id]) if @user.blank?
-    # unless current_user?(@user) || current_user.admin?
-    #   flash[:danger] = "アクセス出来ません。"
-    #   redirect_to(root_url)
-    # end
+      @user = User.find(params[:user_id]) if @user.blank?
+    unless current_user?(@user) || current_user.admin?
+      flash[:danger] = "アクセス出来ません。"
+      redirect_to(root_url)
+    end
   end
   
   def in_attendance

@@ -5,8 +5,10 @@
 
 <!-- CSVインポート -->
 <div class="">
-  <%= file_field_tag :file %>
-  <%= submit_tag "CSVをインポート", class:"btn btn-primary"%>
+  <%= form_tag import_users_path, multipart: true do %>
+    <%= file_field_tag :file %>
+    <%= submit_tag "CSVをインポート", class:"btn btn-primary"%>
+  <% end %>
 </div>
 
 <!-- ユーザー検索 -->

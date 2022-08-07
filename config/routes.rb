@@ -19,7 +19,7 @@ Rails.application.routes.draw do
       get 'attendance_log'
       get 'attendances/edit_one_month'
       patch 'attendances/update_one_month'
-      
+      get 'csv_export'
       get 'attendances/req_overtime'
       patch 'attendances/update_overtime'
       get 'attendances/notice_overtime'
@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       get 'reports/notice_report'
       patch 'reports/update_report'
     end
+    collection {post :import}
     resources :attendances, only: :update
     resources :reports, only: :create
   end
