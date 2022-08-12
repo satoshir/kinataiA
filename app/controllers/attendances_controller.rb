@@ -65,13 +65,22 @@ class AttendancesController < ApplicationController
         
         # 現在日以前のみ確認
         if @attendance.worked_on <= Date.current
-          
+          if item[:c_af_started_at].blank? && item[:c_af_finished_at].present?
+             flash[:danger] = "開始時間がないと終了時間の入力は出来ません。"
+             redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
+          elsif item[:c_af_started_at].present? && item[:c_af_finished_at].blank?
+             flash[:danger] = "終了時間がないと開始時間の入力は出来ません。"
+             redirect_to attendances_edit_one_month_user_url(date: params[:date]) and return
+          else
+             attendance = Attendance.find(id)
+             attendance.update_attributes!(item)
+          end
           # 申請先が選択済み、既に申請中でないもの
           if @attendance.c_request.present? && @attendance.c_approval != "申請中"
-            @attendance.c_af_started_at = make_time(@attendance, "start")
-            @attendance.c_af_finished_at = make_time(@attendance, "finish")
-            
-            # # 変更前の履歴を保存する
+            # @attendance.c_af_started_at = make_time(@attendance, "start")
+            # @attendance.c_af_finished_at = make_time(@attendance, "finish")
+         
+            # 変更前の履歴を保存する
             @attendance.c_bf_started_at = @attendance.started_at if @attendance.started_at.present?
             @attendance.c_bf_finished_at = @attendance.finished_at if @attendance.finished_at.present?
             
@@ -308,17 +317,19 @@ class AttendancesController < ApplicationController
       return total
     end
     
-    # 時間のみで、日付が未設定なため日付を付加する
-    def make_time(at, hours)
-      hours = hours == "start" ? at.c_af_started_at : at.c_af_finished_at
+    # # 時間のみで、日付が未設定なため日付を付加する
+    # def make_time(at, hours)
+    # hours = hours == "start" ? at.c_af_started_at : at.c_af_finished_at
       
-      @datetime = DateTime.new(at.worked_on.year,
-                              at.worked_on.month,
-                              at.worked_on.day,
-                              hours.hour,
-                              hours.min,
-                              0).in_time_zone("Asia/Tokyo") - 9.hour
-      return @datetime
-    end
+    #   @datetime = DateTime.new(at.worked_on.year,
+    #                           at.worked_on.month,
+    #                           at.worked_on.day,
+    #                           hours.hour,
+    #                           hours.min,
+    #                           0).in_time_zone("Asia/Tokyo") - 9.hour
+    #   return @datetime
+    # end
+  
+
     
 end

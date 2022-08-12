@@ -49,11 +49,11 @@
             <!-- 指示者確認㊞ -->
             <td class="dropdown_menu">
               <% if @user.name == "上長A" %>
-                <% @array = ['', '上長B', 'テスト1'] %>
+                <% @array = ['', '上長B'] %>
               <% elsif @user.name == "上長B" %>
-                <% @array = ['', '上長A', 'テスト1'] %>
+                <% @array = ['', '上長A'] %>
               <% else %>
-                <% @array = ['', '上長A', '上長B', 'テスト1'] %>
+                <% @array = ['', '上長A', '上長B'] %>
               <% end %>
               
               <% if att.c_approval == "承認" %>

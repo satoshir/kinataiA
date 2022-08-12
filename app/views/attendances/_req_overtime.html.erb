@@ -43,11 +43,11 @@
                     <!-- 指示者確認㊞ -->
                     <td class="dropdown_menu">
                       <% if @user.name == "上長A" %>
-                        <%= attendance.select :o_request, ['', '上長B', 'テスト1'], {:selected =>''} %>
+                        <%= attendance.select :o_request, ['', '上長B'], {:selected =>''} %>
                       <% elsif @user.name == "上長B" %>
-                        <%= attendance.select :o_request, ['', '上長A', 'テスト1'], {:selected =>''} %>
+                        <%= attendance.select :o_request, ['', '上長A'], {:selected =>''} %>
                       <% else %>
-                        <%= attendance.select :o_request, ['', '上長A', '上長B', 'テスト1'], {:selected =>''} %>
+                        <%= attendance.select :o_request, ['', '上長A', '上長B'], {:selected =>''} %>
                       <% end %>
                     </td>
                   </tr>

@@ -123,29 +123,74 @@
         
         <!--曜日-->
         <td class="<%= css_class %>"><%= %w{日 月 火 水 木 金 土}[day.worked_on.wday] %></td>
-        
+        <!--登録ボタン-->
         <td>
           <% if btn_text = attendance_state(day) %>
             <%= link_to "#{btn_text}登録", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
           <% end %>
         </td>
+        <!--出勤退勤-->
         <td><%= l(day.started_at.floor_to(15.minutes), format: :hour) if day.started_at.present? %></td>
         <td><%= l(day.started_at.floor_to(15.minutes), format: :minute) if day.started_at.present? %></td>
         <td><%= l(day.finished_at.floor_to(15.minutes), format: :hour) if day.finished_at.present? %></td>
         <td><%= l(day.finished_at.floor_to(15.minutes), format: :minute) if day.finished_at.present? %></td>
         <td></td>
+        <!--在社時間-->
         <td>
           <% if day.started_at.present? && day.finished_at.present? %>
             <%= str_times = working_times(day.started_at, day.finished_at) %>
             <% @total_working_times = @total_working_times.to_f + str_times.to_f %>
           <% end %>
         </td>
+        <!--備考-->
         <td><%= day.note %></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        
+        <% if day.end_time.present? && !day.o_request.nil? %>
+        <!-- 終了予定時間：時、分 -->
+          <td><%= day.end_time.hour %></td>
+          <td><%= day.end_time.min %></td>
+          
+        <!--時間外残業-->
+          <td>
+            <% if day.overtime < 0 %>
+              <%= "0 h" %>
+            <% else %>
+              <%= "#{day.overtime} h" %>
+            <% end %>
+          </td>
+        <% else %>
+          <td></td>
+          <td></td>
+          <td></td>
+        <% end %>
+        <!-- 業務処理内容 -->
+        <td><%= day.business_process %></td>
+        
+        <!-- 指示書確認㊞ -->
+        <td>
+          <div class="text-left">
+          <% case day.o_approval %>
+            <% when 'なし' then %>
+              <%= "" %>
+            <% when '申請中' then %>
+              <%= "・#{day.o_request}へ残業申請中" %><br>
+            <% when '承認' then %>
+              <%= "○ 残業承認済" %><br>
+            <% when '否認' then %>
+              <%= "× 残業否認" %><br>
+          <% end %>
+          <% case day.c_approval %>
+            <% when 'なし' then %>
+              <%= "" %>
+            <% when '申請中' then %>
+              <%= "・#{day.c_request}へ勤怠変更申請中" %>
+            <% when '承認' then %>
+              <%= "○ 勤怠変更承認済" %>
+            <% when '否認' then %>
+              <%= "× 勤怠変更否認" %>
+          <% end %>
+          </div>
+        </td>
       </tr>
     <% end %>
   </tbody>
@@ -175,11 +220,11 @@
             
             <div class="dropdown_menu2">
               <% if @user.name == "上長A" %>
-                <%= f.select :r_request, ['', '上長B', 'テスト1'], {:selected =>''} %>
+                <%= f.select :r_request, ['', '上長B'], {:selected =>''} %>
               <% elsif @user.name == "上長B" %>
-                <%= f.select :r_request, ['', '上長A', 'テスト1'], {:selected =>''} %>
+                <%= f.select :r_request, ['', '上長A'], {:selected =>''} %>
               <% else %>
-                <%= f.select :r_request, ['', '上長A', '上長B', 'テスト1'], {:selected =>''} %>
+                <%= f.select :r_request, ['', '上長A', '上長B'], {:selected =>''} %>
               <% end %>
             </div>
             <%= f.submit "申請", class: "btn btn-primary w-100px" %>
