@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '2.7.6'
 
 gem 'rails',        '~> 5.1.6'
-gem 'rails-i18n' 
+gem 'rails-i18n'
 gem 'bcrypt'
 gem 'faker'
 gem 'rounding'
@@ -17,7 +17,7 @@ gem 'coffee-rails', '~> 4.2'
 gem 'jquery-rails'
 gem 'turbolinks',   '~> 5'
 gem 'jbuilder',     '~> 2.5'
-gem 'roo'  # csvファイル読込用（Excel, CSV, OpenOffice, GoogleSpreadSheetを開くことが可能）
+gem 'roo'
 # gem 'rake', '< 11.0'
 
 group :development, :test do
