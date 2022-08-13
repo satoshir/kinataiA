@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.6.9'
+ruby '2.7.6'
 
 gem 'rails',        '~> 5.1.6'
 gem 'rails-i18n' 
@@ -21,8 +21,8 @@ gem 'roo'  # csvファイル読込用（Excel, CSV, OpenOffice, GoogleSpreadShee
 gem 'rake', '< 11.0'
 
 
+
 group :development, :test do
-  gem 'sqlite3'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
 
