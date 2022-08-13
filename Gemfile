@@ -18,9 +18,7 @@ gem 'jquery-rails'
 gem 'turbolinks',   '~> 5'
 gem 'jbuilder',     '~> 2.5'
 gem 'roo'  # csvファイル読込用（Excel, CSV, OpenOffice, GoogleSpreadSheetを開くことが可能）
-gem 'rake', '< 11.0'
-
-
+# gem 'rake', '< 11.0'
 
 group :development, :test do
   gem 'sqlite3', '1.3.13'
