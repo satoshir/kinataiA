@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :edit_basic_info_admin, :working_list, :attendance_log, :csv_export]
   # アクセス先のログインユーザーor上長（管理者も不可）
-  # before_action :admin_or_correct, only: :show
+  before_action :admin_or_correct, only: :show
   # ログイン中かどうか
   before_action :logged_in_user, only: [:edit, :index, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :edit_basic_info_admin, :attendance_log, :working_list]
   # アクセス先のログインユーザーかどうか
@@ -125,13 +125,13 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
   
-  # def admin_or_correct
-  #     @user = User.find(params[:user_id]) if @user.blank?
-  #   unless current_user?(@user) || current_user.admin?
-  #     flash[:danger] = "アクセス出来ません。"
-  #     redirect_to(root_url)
-  #   end
-  # end
+  def admin_or_correct
+      @user = User.find(params[:user_id]) if @user.blank?
+    unless current_user?(@user) || current_user.admin?
+      flash[:danger] = "アクセス出来ません。"
+      redirect_to(root_url)
+    end
+  end
   
   def in_attendance
     @users = User.all
@@ -177,6 +177,5 @@ class UsersController < ApplicationController
     def notice_overtime
       @notice_user = User.where(id: Attendance.where(o_request: @user.name, o_approval: "申請中").select(:user_id))
     end
-    
   
 end
