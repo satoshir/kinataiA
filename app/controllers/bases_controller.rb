@@ -2,7 +2,7 @@ class BasesController < ApplicationController
   before_action :set_base, only: [:edit, :update, :destroy]
   
   # 管理者かどうか
-  before_action :admin_user, only: [:index, :edit, :update, :destroy]
+  before_action :admin_user, only: [:index, :show, :new, :edit, :update]
   
   def new
   end
@@ -52,6 +52,6 @@ class BasesController < ApplicationController
     end
   
     def base_params
-      params.permit(:base_no, :base_name, :attendance_type)
+      params.require(:base).permit(:base_no, :base_name, :attendance_type)
     end
 end
