@@ -7,13 +7,13 @@ class UsersController < ApplicationController
   # アクセス先のログインユーザーかどうか
   before_action :correct_user, only: [:edit, :update, :attendance_log]
   # 管理者かどうか
-  # before_action :admin_user, only: [:index, :destroy, :edit_basic_info, :update_basic_info, :edit_basic_info_admin, :working_list]
+  before_action :admin_user, only: [:index, :destroy, :edit_basic_info, :update_basic_info, :edit_basic_info_admin, :working_list]
   # # １ヶ月分の勤怠情報を取得
-  before_action :admin_user, only: [:show, :edit, :edit_one_month]
+  # before_action :admin_user, only: [:show, :edit, :edit_one_month]
   # １ヶ月分の勤怠情報を取得
   before_action :set_one_month, only: [:show, :attendance_log, :csv_export]
   
-  before_action :admin_not, only:[:show, :edit, :edit_one_month] 
+  before_action :admin_not, only:[:show, :edit] 
  
 
 

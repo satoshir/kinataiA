@@ -53,6 +53,9 @@ class AttendancesController < ApplicationController
   
   # 勤怠編集画面
   def edit_one_month
+    if current_user.admin?
+      redirect_to root_url
+    end
   end
 
   # 勤怠変更申請の送信
