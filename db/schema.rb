@@ -66,13 +66,13 @@ ActiveRecord::Schema.define(version: 20220807050402) do
     t.string "password_digest"
     t.string "remember_digest"
     t.boolean "admin", default: false
-    t.datetime "basic_work_time", default: "2022-08-13 22:30:00"
-    t.datetime "designated_work_start_time", default: "2022-08-14 00:00:00"
-    t.datetime "designated_work_end_time", default: "2022-08-14 08:30:00"
+    t.datetime "basic_work_time", default: "2022-08-15 22:30:00"
+    t.datetime "designated_work_start_time", default: "2022-08-16 00:00:00"
+    t.datetime "designated_work_end_time", default: "2022-08-16 08:30:00"
     t.integer "employee_number"
     t.string "uid"
     t.boolean "superior", default: false
-    t.datetime "work_time", default: "2022-08-13 22:30:00"
+    t.datetime "work_time", default: "2022-08-15 22:30:00"
     t.string "affiliation"
     t.index ["email"], name: "index_users_on_email", unique: true
   end

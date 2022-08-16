@@ -2,7 +2,7 @@ class BasesController < ApplicationController
   before_action :set_base, only: [:edit, :update, :destroy]
   
   # 管理者かどうか
-  before_action :admin_user, only: [:index, :show, :new, :edit, :update]
+  before_action :admin_user, only: [:index, :edit, :update, :destroy]
   
   def new
   end
@@ -14,14 +14,16 @@ class BasesController < ApplicationController
     @bases = Base.all
   end
   
+  
+  # 修正
   def create
-    @base = Base.create(base_params)
-    if @base.update_attributes(base_params)
-      flash[:success] = "#{@base.base_name}の拠点情報が追加されました。"
+    @base = Base.new(base_params)
+    if @base.save
+      flash[:success] = '拠点を追加しました。'
       redirect_to bases_url
     else
-      flash[:danger] = "拠点情報を追加できませんでした。<br><li>" + @base.errors.full_messages.join("</li><li>")
-      redirect_to bases_url
+      flash[:danger] = '拠点情報を追加できませんでした。'
+       redirect_to bases_url
     end
   end
   
