@@ -28,8 +28,8 @@ class BasesController < ApplicationController
   end
   
   def update
-    @base_name = @base.base_name
-    if @base.update_attributes(base_params)
+    # @base_name = @base.base_name
+    if @base.update_attributes(update_params)
       flash[:success] = "#{@base.base_name}の拠点情報を更新しました。"
       redirect_to bases_path
     else
@@ -54,6 +54,10 @@ class BasesController < ApplicationController
     end
   
     def base_params
-      params.require(:base).permit(:base_no, :base_name, :attendance_type)
+      params.permit(:base_no, :base_name, :attendance_type)
+    end
+    
+    def update_params
+     params.require(:base).permit(:base_no, :base_name, :attendance_type)
     end
 end
